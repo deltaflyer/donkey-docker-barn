@@ -32,6 +32,14 @@ ENV PATH /home/user/conda/bin/:$PATH
 RUN conda update -y -n base -c defaults conda \
     && conda install -y tensorflow-gpu==1.13.1
 
+# Install OpenCV
+RUN conda install -y opencv==3.4.2
+
+# Clone Keras-Vis
+RUN git clone https://github.com/autorope/keras-vis.git \
+    && cd keras-vis \
+    && git checkout 3d9d61728312f278a62cbe6b3f9ae92eb4c51520
+
 # Clone Donkey-Car
 RUN git clone https://github.com/autorope/donkeycar \
     && cd donkeycar \
@@ -51,6 +59,8 @@ RUN cd ~/donkeycar \
     && echo "pip install -e .[pc]" >> activate.sh \
     && echo "cd ~/gym-donkeycar" >> activate.sh \
     && echo "pip install -e .[pc]" >> activate.sh \
+    && echo "cd ~/keras-vis" >> activate.sh \
+    && echo "pip install -e ." >> activate.sh \
     && echo "donkey createcar --path ~/mycar" >> activate.sh \
     && bash activate.sh \
     && rm -rf ~/mycar \
